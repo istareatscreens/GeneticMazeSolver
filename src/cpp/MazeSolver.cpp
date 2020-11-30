@@ -11,6 +11,11 @@
 #include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
 
+EM_JS(void, call_alert, (), {
+   alert('hello world!');
+   throw 'all done';
+});
+
 //Execution Parameters
 const int populationSize = 50;
 const double perBitMutationRate = 0.01;
