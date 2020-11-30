@@ -11,10 +11,10 @@
 #include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
 
-EM_JS(void, call_alert, (), {
-   alert('hello world!');
-   throw 'all done';
-});
+extern "C"
+{
+   extern void pass_coordinates();
+}
 
 //Execution Parameters
 const int populationSize = 50;
@@ -33,7 +33,7 @@ void rouleteWheelSelection(std::vector<float> fitnessProbabilities, std::vector<
 
 void init()
 {
-   solveMaze();
+   pass_coordinates();
 }
 
 void solveMaze()

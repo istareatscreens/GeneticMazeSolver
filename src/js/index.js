@@ -27,9 +27,15 @@ function calculateDimension(ctx) {
     }
 }
 
+/*
 window.addEventListener('mousemove', (event) => {
-
     console.log("x " + event.x + " y: " + event.y);
+})
+*/
+
+window.addEventListener('gotCoordinates', (event) => {
+
+    console.log(event);
 })
 
 function generateTile(boarderColor, color, ctx) {
@@ -62,9 +68,12 @@ function init() {
     ctx.canvas.width = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
 
+    console.log(Module);
     generateMap(ctx);
     window.addEventListener("resize", resizeCanvas(ctx), false);
+    Module.init();
 }
+
 
 
 function generateMap(ctx) {
