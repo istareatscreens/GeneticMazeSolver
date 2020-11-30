@@ -1,0 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  border: 0;
+  overflow: hidden; /*  Disable scrollbars */
+  background: black;
+  display: block; /* No floating content on sides */
+}

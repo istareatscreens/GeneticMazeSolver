@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "transpile": "babel src/js -d public/lib",
-    "wasm": "emcc ./src/cpp/MazeSolve.cpp  ./src/cpp/Map.cpp  ./src/cpp/Map.h  ./src/cpp/Player.cpp ./src/cpp/Player.h -o public/lib/maze_wasm.js --std=c++17 --bind",
-    "clean": "rm build/*"
+    "wasm": "cd ./src/cpp/ ; emmake make",
+    "clean": "rm build/* public/lib/* 2>/dev/null",
+    "build": "npm run clean --silent && npm run transpile && npm run wasm",
+    "dev": "emrun ./public/index.html --no_emrun_detect --serve_after_close"
   },
   "repository": {
     "type": "git",
