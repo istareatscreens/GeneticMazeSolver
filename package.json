@@ -20,5 +20,13 @@
   "bugs": {
     "url": "https://github.com/istareatscreens/GeneticMazeSolver/issues"
   },
-  "homepage": "https://github.com/istareatscreens/GeneticMazeSolver#readme"
+  "homepage": "https://github.com/istareatscreens/GeneticMazeSolver#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.9",
+    "@babel/plugin-transform-runtime": "^7.12.1"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.12.5"
+  }
 }
