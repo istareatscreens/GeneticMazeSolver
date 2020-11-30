@@ -8,6 +8,6 @@ html,
 body {
   border: 0;
   overflow: hidden; /*  Disable scrollbars */
-  background: black;
+ /* background: black; */
   display: block; /* No floating content on sides */
 }
