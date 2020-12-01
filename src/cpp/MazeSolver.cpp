@@ -12,7 +12,7 @@
 #include <emscripten/bind.h>
 
 //Execution Parameters
-const int populationSize = 50;
+const int populationSize = 100;
 const double perBitMutationRate = 0.01;
 const int plateauConstant = 100; //after x generations with no change in fitness end algorithm
 const int maxGeneration = 500;
@@ -21,8 +21,8 @@ const int maxGeneration = 500;
 //const int numberOfThreads = 8;
 //std::mutex mutexLock;
 
-EM_JS(void, sendPlayerData, (int generation, int strLength, char *coordinates), {
-   dispatchEvent(new CustomEvent("gotCoordinates", {detail : {gen : generation, coord : coordinates, len : strLength}}));
+EM_JS(void, sendPlayerData, (int generation, int done, char *coordinates), {
+   dispatchEvent(new CustomEvent("gotCoordinates", {detail : {gen : generation, coord : coordinates, done : done}}));
 });
 
 void executeRouleteMateMatching(int &i, int j, int &selectedMate, std::vector<Player> &population, long generation);
@@ -127,12 +127,11 @@ void solveMaze()
 
          // declaring character array
          char *char_array = new char[length + 1];
-
          // copying the contents of the
          // string to char array
          strcpy(char_array, coordinateString.c_str());
          //call javascript function
-         sendPlayerData(population.front().getGeneration(), population.front().getNumberOfMoves(), char_array);
+         sendPlayerData(population.front().getGeneration(), 0, char_array);
          delete[] char_array;
       }
 
@@ -156,6 +155,16 @@ void solveMaze()
       {
          if (exitCounter > plateauConstant)
          {
+            std::string coordinateString = population.front().generateCoordinateString();
+            int length = coordinateString.length();
+            // declaring character array
+            char *char_array = new char[length + 1];
+            // copying the contents of the
+            // string to char array
+            strcpy(char_array, coordinateString.c_str());
+            //call javascript function
+            sendPlayerData(population.front().getGeneration() - exitCounter, 1, char_array);
+            delete[] char_array;
             return;
          }
          else

@@ -32,13 +32,21 @@ window.addEventListener('mousemove', (event) => {
 })
 */
 
-function drawPath(list, ctx) {
+function drawPath(list, ctx, isDone, gen) {
+    let textValue = document.querySelector("h1");
+    textValue.textContent = "Generation: " + gen;
+    ctx.stroke();
     ctx.beginPath();
     let startpoint = coordinateList[parseInt(list[1]) * mapWidth + parseInt(list[0])];
     ctx.moveTo(startpoint.x, startpoint.y);
     for (let i = 2; i < list.length - 1; i += 2) {
         let point = coordinateList[parseInt(list[i + 1]) * mapWidth + parseInt(list[i])];
         ctx.lineTo(point.x, point.y);
+        if (isDone) {
+            ctx.strokeStyle = "#FA9500";
+        } else {
+            ctx.strokeStyle = "#000000";
+        }
         ctx.stroke();
     }
 
@@ -63,6 +71,8 @@ function resizeCanvas(ctx) {
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         generateMap(ctx)
+        let textValue = document.querySelector("h1");
+        textValue.textContent = "Click Run to Run!";
     }
 }
 
@@ -79,9 +89,9 @@ function init() {
 
     window.addEventListener('gotCoordinates', (event) => {
         //len isnt used
-        let { coord, len, gen } = event.detail;
+        let { coord, done, gen } = event.detail;
         let coordinates = (UTF8ToString(coord)).split((/[ ,]+/));
-        drawPath(coordinates, ctx);
+        drawPath(coordinates, ctx, done, gen);
     })
 
 }

@@ -16,11 +16,23 @@ canvas {
   z-index: -1;
 }
 
+
+
+#GenerationPrint{
+  display:flex;
+  justify-content: center;
+  position:top;
+  padding-top: 0.5rem;
+  z-index: 15;
+  font: 1.0rem;
+  color: black;
+}
+
 #runbtn {
   position: absolute;
   width: 5rem;
   height: 2.5rem;
-  left: 2rem;
-  top: 2rem;
+  left: 0.5rem;
+  top: 0.5rem;
   z-index: 10;
 }

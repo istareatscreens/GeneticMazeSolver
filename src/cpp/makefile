@@ -1,5 +1,5 @@
 MazeSolver: MazeSolver.o Player.o Map.o
-	emcc -std=c++17 -O3 MODULARIZE=1 -Wconversion -Wall -Werror -Wextra -Wno-conversion -pedantic -g3 MazeSolver.o Player.o Map.o -o maze_wasm.js --bind 
+	emcc -std=c++17 -O3  -Wconversion -Wall -Werror -Wextra -Wno-conversion -pedantic -g3 MazeSolver.o Player.o Map.o -o maze_wasm.js --bind 
 	mv *.o ../../build/ &
 	mv *.gch ../../build/ &
 	mv *.wasm ../../public/lib/ &
