@@ -11,11 +11,6 @@
 #include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
 
-extern "C"
-{
-   extern void pass_coordinates();
-}
-
 //Execution Parameters
 const int populationSize = 50;
 const double perBitMutationRate = 0.01;
@@ -26,6 +21,10 @@ const int maxGeneration = 500;
 //const int numberOfThreads = 8;
 //std::mutex mutexLock;
 
+EM_JS(void, sendPlayerData, (int generation, int strLength, char *coordinates), {
+   dispatchEvent(new CustomEvent("gotCoordinates", {detail : {gen : generation, coord : coordinates, len : strLength}}));
+});
+
 void executeRouleteMateMatching(int &i, int j, int &selectedMate, std::vector<Player> &population, long generation);
 void conductMate(Player parent1, Player parent2, std::vector<Player> &population, long generation);
 void solveMaze();
@@ -33,7 +32,7 @@ void rouleteWheelSelection(std::vector<float> fitnessProbabilities, std::vector<
 
 void init()
 {
-   pass_coordinates();
+   solveMaze();
 }
 
 void solveMaze()
@@ -121,7 +120,20 @@ void solveMaze()
       //Print Progress to console
       if (lastBestFitness != population.front().getFitness() || generation == 0)
       {
-         population.front().printMovements();
+         //population.front().printMovements();
+
+         std::string coordinateString = population.front().generateCoordinateString();
+         int length = coordinateString.length();
+
+         // declaring character array
+         char *char_array = new char[length + 1];
+
+         // copying the contents of the
+         // string to char array
+         strcpy(char_array, coordinateString.c_str());
+         //call javascript function
+         sendPlayerData(population.front().getGeneration(), population.front().getNumberOfMoves(), char_array);
+         delete[] char_array;
       }
 
       generation++;

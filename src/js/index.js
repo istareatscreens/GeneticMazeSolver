@@ -23,7 +23,6 @@ function calculateDimension(ctx) {
         return Math.sqrt(width * width / (mapWidth * mapHeight));
     } else {
         return Math.sqrt(height * height / (mapWidth * mapHeight));
-
     }
 }
 
@@ -33,10 +32,17 @@ window.addEventListener('mousemove', (event) => {
 })
 */
 
-window.addEventListener('gotCoordinates', (event) => {
+function drawPath(list, ctx) {
+    ctx.beginPath();
+    let startpoint = coordinateList[parseInt(list[1]) * mapWidth + parseInt(list[0])];
+    ctx.moveTo(startpoint.x, startpoint.y);
+    for (let i = 2; i < list.length - 1; i += 2) {
+        let point = coordinateList[parseInt(list[i + 1]) * mapWidth + parseInt(list[i])];
+        ctx.lineTo(point.x, point.y);
+        ctx.stroke();
+    }
 
-    console.log(event);
-})
+}
 
 function generateTile(boarderColor, color, ctx) {
     return (dimension, x, y) => {
@@ -71,10 +77,20 @@ function init() {
     console.log(Module);
     generateMap(ctx);
     window.addEventListener("resize", resizeCanvas(ctx), false);
-    Module.init();
+
+    window.addEventListener('gotCoordinates', (event) => {
+        //len isnt used
+        let { coord, len, gen } = event.detail;
+        let coordinates = (UTF8ToString(coord)).split((/[ ,]+/));
+        drawPath(coordinates, ctx);
+    })
+
+    //Module.init();
 }
 
-
+window.addEventListener('click', (event) => {
+    Module.init();
+})
 
 function generateMap(ctx) {
     const createTile = drawTile(ctx);
@@ -93,7 +109,6 @@ function generateMap(ctx) {
         y += dimension;
         x = centerX;
     }
-    console.log(coordinateList);
 }
 
 function drawTile(ctx) {

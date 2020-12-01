@@ -42,7 +42,9 @@ public:
    bool areRelated(Player player);
    void printMovements();
    long getGeneration() const;
+   int getNumberOfMoves() const;
    int getFitness() const;
+   std::string generateCoordinateString();
    bool hasSolvedMaze() const;
    bool operator!=(const Player right) const;
    bool operator==(const Player right) const;

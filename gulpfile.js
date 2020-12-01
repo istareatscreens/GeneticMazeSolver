@@ -75,7 +75,7 @@ function watchTask() {
             baseDir: './public/'
         }
     });
-    gulp.watch([cssPath, jsPath, cppPath, wasmJSPath, htmlPath], { interval: 1000 }, parallel(cssTask, jsTask, wasmTask));
+    gulp.watch([cssPath, jsPath, cppPath, wasmJSPath, htmlPath], { interval: 1000 }, parallel(cssTask, jsTask, wasmTask, copyHtml, imgTask));
     gulp.watch(htmlPath).on('change', browserSync.reload);
     gulp.watch(jsPath).on('change', browserSync.reload);
     gulp.watch(cssPath).on('change', browserSync.reload);

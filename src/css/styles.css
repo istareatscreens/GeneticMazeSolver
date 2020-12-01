@@ -11,3 +11,16 @@ body {
  /* background: black; */
   display: block; /* No floating content on sides */
 }
+
+canvas {
+  z-index: -1;
+}
+
+#runbtn {
+  position: absolute;
+  width: 5rem;
+  height: 2.5rem;
+  left: 2rem;
+  top: 2rem;
+  z-index: 10;
+}

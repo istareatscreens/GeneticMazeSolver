@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <sstream>
 #include <bitset>
 #include <iostream>
 
@@ -218,6 +219,23 @@ void Player::printMovements()
       break;
    }
    std::cout << std::endl;
+}
+std::string Player::generateCoordinateString()
+{
+   std::ostringstream input;
+   long unsigned int i = 0;
+   input << map.getStartingX() << "," << map.getStartingY() << ",";
+   for (i = 0; i < movementHistory.size() - 1; i++)
+   {
+      input << (movementHistory[i][0]) << "," << (movementHistory[i][1]) << ",";
+   }
+   input << (movementHistory[i][0]) << "," << (movementHistory[i][1]);
+   return input.str();
+}
+
+int Player::getNumberOfMoves() const
+{
+   return movementHistory.size();
 }
 
 std::string Player::getDirection(unsigned int direction)
