@@ -12,7 +12,7 @@
 #include <emscripten/bind.h>
 
 //Execution Parameters
-const int populationSize = 100;
+const int populationSize = 50;
 const double perBitMutationRate = 0.01;
 const int plateauConstant = 100; //after x generations with no change in fitness end algorithm
 const int maxGeneration = 500;

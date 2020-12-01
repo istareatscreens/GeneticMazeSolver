@@ -31,27 +31,6 @@ window.addEventListener('mousemove', (event) => {
     console.log("x " + event.x + " y: " + event.y);
 })
 */
-
-function drawPath(list, ctx, isDone, gen) {
-    let textValue = document.querySelector("h1");
-    textValue.textContent = "Generation: " + gen;
-    ctx.stroke();
-    ctx.beginPath();
-    let startpoint = coordinateList[parseInt(list[1]) * mapWidth + parseInt(list[0])];
-    ctx.moveTo(startpoint.x, startpoint.y);
-    for (let i = 2; i < list.length - 1; i += 2) {
-        let point = coordinateList[parseInt(list[i + 1]) * mapWidth + parseInt(list[i])];
-        ctx.lineTo(point.x, point.y);
-        if (isDone) {
-            ctx.strokeStyle = "#FA9500";
-        } else {
-            ctx.strokeStyle = "#000000";
-        }
-        ctx.stroke();
-    }
-
-}
-
 function generateTile(boarderColor, color, ctx) {
     return (dimension, x, y) => {
         ctx.fillStyle = color;
@@ -90,11 +69,37 @@ function init() {
     window.addEventListener('gotCoordinates', (event) => {
         //len isnt used
         let { coord, done, gen } = event.detail;
-        let coordinates = (UTF8ToString(coord)).split((/[ ,]+/));
-        drawPath(coordinates, ctx, done, gen);
-    })
+        console.log("HELLO");
+        let list = (UTF8ToString(coord)).split((/[ ,]+/));
+        //ctx.stroke();
+        //ctx.beginPath();
+        //let startpoint = coordinateList[parseInt(list[1]) * mapWidth + parseInt(list[0])];
+        //ctx.moveTo(startpoint.x, startpoint.y);
 
+        let textValue = document.querySelector("h1");
+        textValue.textContent = "Generation: " + gen;
+        let i = 2;
+        window.requestAnimationFrame(function animate() {
+            ctx.beginPath();
+            //let startpoint = coordinateList[parseInt(list[1]) * mapWidth + parseInt(list[0])];
+            if (i < list.length - 1) {
+                let point1 = coordinateList[parseInt(list[i - 1]) * mapWidth + parseInt(list[i - 2])];
+                let point2 = coordinateList[parseInt(list[i + 1]) * mapWidth + parseInt(list[i])];
+                ctx.moveTo(point1.x, point1.y);
+                ctx.lineTo(point2.x, point2.y);
+                if (done) {
+                    ctx.strokeStyle = "#FA9500";
+                } else {
+                    ctx.strokeStyle = "#000000";
+                }
+                ctx.stroke();
+                i += 2
+                window.requestAnimationFrame(animate);
+            }
+        });
+    })
 }
+
 
 window.addEventListener('click', (event) => {
     Module.init();
