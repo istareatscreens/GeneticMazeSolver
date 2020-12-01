@@ -13,6 +13,7 @@ const run = require('gulp-run');
 
 const output = 'public/lib/';
 
+const jsPathWorker = 'src/js/**/*.worker.js';
 const jsPath = 'src/js/**/*.js';
 const cssPath = 'src/css/**/*.css';
 const cppPath = 'src/cpp/**/*.cpp';
@@ -22,9 +23,23 @@ const htmlPath = 'src/html/*.html';
 const imagePath = 'src/images/*'
 
 function jsTask() {
-    return src(jsPath)
+    return src([jsPath, '!' + jsPathWorker])
         .pipe(sourcemaps.init())
         .pipe(concat('index.js'))
+        .pipe(babel({
+            presets: ['@babel/env'],
+
+            "plugins": ["@babel/plugin-transform-runtime"],
+        }))
+        .pipe(terser())
+        .pipe(sourcemaps.write('.'))
+        .pipe(browserSync.stream())
+        .pipe(dest(output));
+}
+
+function jsWorkerTask() {
+    return src(['!' + jsPath, jsPathWorker])
+        .pipe(sourcemaps.init())
         .pipe(babel({
             presets: ['@babel/env'],
 
@@ -75,7 +90,7 @@ function watchTask() {
             baseDir: './public/'
         }
     });
-    gulp.watch([cssPath, jsPath, cppPath, wasmJSPath, htmlPath], { interval: 1000 }, parallel(cssTask, jsTask, wasmTask, copyHtml, imgTask));
+    gulp.watch([cssPath, jsPath, cppPath, wasmJSPath, htmlPath], { interval: 1000 }, parallel(cssTask, jsTask, wasmTask, copyHtml, imgTask, jsWorkerTask));
     gulp.watch(htmlPath).on('change', browserSync.reload);
     gulp.watch(jsPath).on('change', browserSync.reload);
     gulp.watch(cssPath).on('change', browserSync.reload);
@@ -86,7 +101,7 @@ function watchTask() {
 exports.cssTask = cssTask;
 exports.jsTask = jsTask;
 exports.default = series(
-    parallel(jsTask, cssTask, wasmTask, wasmJSTask, copyHtml, imgTask),
+    parallel(jsTask, cssTask, wasmTask, wasmJSTask, copyHtml, imgTask, jsWorkerTask),
     watchTask
 );
 exports.watch = watch;

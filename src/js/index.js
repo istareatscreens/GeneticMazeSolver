@@ -74,7 +74,6 @@ function init() {
     ctx.canvas.width = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
 
-    console.log(Module);
     generateMap(ctx);
     window.addEventListener("resize", resizeCanvas(ctx), false);
 
@@ -85,7 +84,6 @@ function init() {
         drawPath(coordinates, ctx);
     })
 
-    //Module.init();
 }
 
 window.addEventListener('click', (event) => {
