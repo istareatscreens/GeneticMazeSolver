@@ -40,12 +40,12 @@ function jsTask() {
 function jsWorkerTask() {
     return src(['!' + jsPath, jsPathWorker])
         .pipe(sourcemaps.init())
-        .pipe(babel({
+        /*.pipe(babel({
             presets: ['@babel/env'],
 
             "plugins": ["@babel/plugin-transform-runtime"],
-        }))
-        .pipe(terser())
+        }))*/
+        //.pipe(terser())
         .pipe(sourcemaps.write('.'))
         .pipe(browserSync.stream())
         .pipe(dest(output));

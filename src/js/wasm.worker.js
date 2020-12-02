@@ -1,4 +1,6 @@
-addEventListener('message', (data) => {
-    console.log("HERE ");
-    console.log(data);
+addEventListener('message', async (data) => {
+    importScripts('maze_wasm.js');
+    Module = await createModule();
+    Module.init()
 });
+

@@ -1,5 +1,7 @@
 //Draw canvas
 //Map dimensions
+
+let worker;
 const mapHeight = 10;
 const mapWidth = 15;
 const map =
@@ -56,7 +58,10 @@ function resizeCanvas(ctx) {
 }
 
 
+
 function init() {
+    var worker = new Worker('./lib/wasm.worker.js');
+
     //Set canvas size
     let canvas = document.querySelector("canvas");
     const ctx = canvas.getContext('2d');
@@ -102,7 +107,8 @@ function init() {
 
 
 window.addEventListener('click', (event) => {
-    Module.init();
+    worker.postMessage({ runWasm: "run" });
+    //Module.init();
 })
 
 function generateMap(ctx) {

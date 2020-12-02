@@ -8,24 +8,15 @@
   <link rel="shortcut icon" type="img/png" href="images/favicon.png" />
   <title>Genetic Maze Solver</title>
   <script src="./lib/index.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    var Module = {
-      onRuntimeInitialized: function () {
-        init();
-        var worker = new Worker('./lib/wasm.worker.js');
-        worker.postMessage({ fuck: "hello" });
-
-      }
-    };
-
-  </script>
-  <script src="./lib/maze_wasm.js" type="text/javascript"></script>
+  <script type="text/javascript"> </script>
+  <!-- <script src="./lib/maze_wasm.js" type="text/javascript"></script>-->
 </head>
 
 <body>
   <h1 id="GenerationPrint">Click Run to Run!</h1>
   <canvas></canvas>
   <button type="button" id="runbtn">Run</button>
+  <script type="text/javascript">init() </script>
 </body>
 
 </html>
