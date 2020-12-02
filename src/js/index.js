@@ -1,7 +1,7 @@
 //Draw canvas
 //Map dimensions
 
-let worker;
+
 const mapHeight = 10;
 const mapWidth = 15;
 const map =
@@ -46,87 +46,75 @@ function generateTile(boarderColor, color, ctx) {
     }
 }
 
-function resizeCanvas(ctx) {
+
+
+function init() {
+
+    let worker = new Worker('./lib/wasm.worker.js');
+    let ctx = document.querySelector("canvas").getContext('2d');
+    console.log(ctx);
     //Set canvas size
-    return () => {
+    ctx.canvas.width = window.innerWidth;
+    ctx.canvas.height = window.innerHeight;
+
+    generateMap(ctx);
+
+    //Event listeners
+    window.addEventListener("resize", () => {
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         generateMap(ctx)
         let textValue = document.querySelector("h1");
         textValue.textContent = "Click Run to Run!";
-    }
-}
+    }, false);
 
-
-
-function init() {
-    var worker = new Worker('./lib/wasm.worker.js');
-
-    //Set canvas size
-    let canvas = document.querySelector("canvas");
-    const ctx = canvas.getContext('2d');
-    ctx.canvas.width = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
-
-    generateMap(ctx);
-    window.addEventListener("resize", resizeCanvas(ctx), false);
-
-    window.addEventListener('gotCoordinates', (event) => {
-        //len isnt used
-        let { coord, done, gen } = event.detail;
+    window.addEventListener('click', (event) => {
         console.log("HELLO");
-        let list = (UTF8ToString(coord)).split((/[ ,]+/));
-        //ctx.stroke();
-        //ctx.beginPath();
-        //let startpoint = coordinateList[parseInt(list[1]) * mapWidth + parseInt(list[0])];
-        //ctx.moveTo(startpoint.x, startpoint.y);
+        worker.postMessage({ runWasm: "run" });
+        //Module.init();
+    })
 
+    worker.onmessage = function (event) {
+        console.log("HERE4");
+        console.log(event.data);
+        let { coord, gen, done } = event.data;
         let textValue = document.querySelector("h1");
         textValue.textContent = "Generation: " + gen;
-        let i = 2;
-        window.requestAnimationFrame(function animate() {
-            ctx.beginPath();
-            //let startpoint = coordinateList[parseInt(list[1]) * mapWidth + parseInt(list[0])];
-            if (i < list.length - 1) {
-                let point1 = coordinateList[parseInt(list[i - 1]) * mapWidth + parseInt(list[i - 2])];
-                let point2 = coordinateList[parseInt(list[i + 1]) * mapWidth + parseInt(list[i])];
-                ctx.moveTo(point1.x, point1.y);
-                ctx.lineTo(point2.x, point2.y);
-                if (done) {
-                    ctx.strokeStyle = "#FA9500";
-                } else {
-                    ctx.strokeStyle = "#000000";
-                }
-                ctx.stroke();
-                i += 2
-                window.requestAnimationFrame(animate);
-            }
-        });
-    })
-}
-
-
-window.addEventListener('click', (event) => {
-    worker.postMessage({ runWasm: "run" });
-    //Module.init();
-})
-
-function generateMap(ctx) {
-    const createTile = drawTile(ctx);
-    const dimension = calculateDimension(ctx);
-    let centerX = (ctx.canvas.width - dimension * mapWidth) / 2
-    let centerY = (ctx.canvas.height - dimension * mapHeight) / 2
-    let x = centerX;
-    let y = centerY;
-    coordinateList.length = 0;
-    for (let i = 0; i < mapHeight; i++) {
-        for (let j = 0; j < mapWidth; j++) {
-            //draw rectangles and get center coordinates array for drawing lines
-            coordinateList.push(createTile(map[i * mapWidth + j], dimension, x, y));
-            x += dimension;
+        let list = coord.split(',');
+        if (done) {
+            ctx.strokeStyle = "#FA9500";
+            ctx.lineWidth = 10;
+        } else {
+            ctx.strokeStyle = "#000000";
         }
-        y += dimension;
-        x = centerX;
+        for (let i = 2; i < list.length - 1; i = i + 2) {
+            ctx.beginPath();
+            let point1 = coordinateList[parseInt(list[i - 1]) * mapWidth + parseInt(list[i - 2])];
+            let point2 = coordinateList[parseInt(list[i + 1]) * mapWidth + parseInt(list[i])];
+            ctx.moveTo(point1.x, point1.y);
+            ctx.lineTo(point2.x, point2.y);
+            ctx.stroke();
+        }
+    };
+
+
+    function generateMap(ctx) {
+        const createTile = drawTile(ctx);
+        const dimension = calculateDimension(ctx);
+        let centerX = (ctx.canvas.width - dimension * mapWidth) / 2
+        let centerY = (ctx.canvas.height - dimension * mapHeight) / 2
+        let x = centerX;
+        let y = centerY;
+        coordinateList.length = 0;
+        for (let i = 0; i < mapHeight; i++) {
+            for (let j = 0; j < mapWidth; j++) {
+                //draw rectangles and get center coordinates array for drawing lines
+                coordinateList.push(createTile(map[i * mapWidth + j], dimension, x, y));
+                x += dimension;
+            }
+            y += dimension;
+            x = centerX;
+        }
     }
 }
 

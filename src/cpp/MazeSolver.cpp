@@ -22,7 +22,7 @@ const int maxGeneration = 500;
 //std::mutex mutexLock;
 
 EM_JS(void, sendPlayerData, (int generation, int done, char *coordinates), {
-   dispatchEvent(new CustomEvent("gotCoordinates", {detail : {gen : generation, coord : coordinates, done : done}}));
+   dispatchEvent(new CustomEvent("gotCoordinates", {detail : {gen : generation, coord : UTF8ToString(coordinates), done : done}}));
 });
 
 void executeRouleteMateMatching(int &i, int j, int &selectedMate, std::vector<Player> &population, long generation);
