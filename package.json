@@ -8,7 +8,7 @@
     "wasm": "cd ./src/cpp/ ; emmake make",
     "clean": "rm build/* public/lib/* 2>/dev/null",
     "oldbuild": "npm run clean --silent && npm run transpile && npm run wasm",
-    "build": "npm run wasm && gulp",
+    "build": "gulp",
     "dev": "emrun ./public/index.html --no_emrun_detect --serve_after_close"
   },
   "repository": {

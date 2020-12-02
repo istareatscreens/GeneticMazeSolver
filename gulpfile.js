@@ -17,8 +17,8 @@ const jsPathWorker = 'src/js/**/*.worker.js';
 const jsPath = 'src/js/**/*.js';
 const cssPath = 'src/css/**/*.css';
 const cppPath = 'src/cpp/**/*.cpp';
-const wasmJSPath = 'build/*.js';
-const wasmPath = 'public/lib/*.wasm';
+const wasmJSPath = 'src/wasm/*.js';
+const wasmPath = 'src/wasm/*.wasm';
 const htmlPath = 'src/html/*.html';
 const imagePath = 'src/images/*'
 
@@ -50,7 +50,6 @@ function jsWorkerTask() {
         .pipe(browserSync.stream())
         .pipe(dest(output));
 }
-
 
 function wasmTask() {
     return src(wasmPath)
