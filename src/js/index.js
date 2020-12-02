@@ -21,10 +21,19 @@ const coordinateList = [];
 function calculateDimension(ctx) {
     let width = ctx.canvas.width;
     let height = ctx.canvas.height;
+    let shrinkFactor = 1;
+    if (width < 1050) {
+        shrinkFactor = (width / 1050);
+    } else if (width < 850) {
+        shrinkFactor = (width / 1050) * 0.2;
+    } else if (width < 500) {
+        shrinkFactor = (width / 1050) * 0.05;
+    }
+
     if (width < height) {
-        return Math.sqrt(width * width / (mapWidth * mapHeight));
+        return Math.sqrt(shrinkFactor * width * width / (mapWidth * mapHeight));
     } else {
-        return Math.sqrt(height * height / (mapWidth * mapHeight));
+        return Math.sqrt(shrinkFactor * height * height / (mapWidth * mapHeight));
     }
 }
 
@@ -52,7 +61,7 @@ function init() {
 
     let worker = new Worker('./lib/wasm.worker.js');
     let ctx = document.querySelector("canvas").getContext('2d');
-    console.log(ctx);
+
     //Set canvas size
     ctx.canvas.width = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
@@ -68,24 +77,35 @@ function init() {
         textValue.textContent = "Click Run to Run!";
     }, false);
 
-    window.addEventListener('click', (event) => {
-        console.log("HELLO");
-        worker.postMessage({ runWasm: "run" });
-        //Module.init();
+    let btn = document.querySelector("button");
+    btn.addEventListener('click', (event) => {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.beginPath();
+        generateMap(ctx)
+        let pop = document.getElementById('pop').value;
+        let mut = document.getElementById('mut').value;
+        let plat = document.getElementById('plat').value;
+        let gen = document.getElementById('gen').value;
+
+        worker.postMessage({
+            pop: pop,
+            mut: mut,
+            plat: plat,
+            gen: gen
+        })
     })
 
     worker.onmessage = function (event) {
-        console.log("HERE4");
-        console.log(event.data);
         let { coord, gen, done } = event.data;
         let textValue = document.querySelector("h1");
         textValue.textContent = "Generation: " + gen;
         let list = coord.split(',');
         if (done) {
             ctx.strokeStyle = "#FA9500";
-            ctx.lineWidth = 10;
+            ctx.lineWidth = 2;
         } else {
             ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 0.5;
         }
         for (let i = 2; i < list.length - 1; i = i + 2) {
             ctx.beginPath();
@@ -101,8 +121,15 @@ function init() {
     function generateMap(ctx) {
         const createTile = drawTile(ctx);
         const dimension = calculateDimension(ctx);
-        let centerX = (ctx.canvas.width - dimension * mapWidth) / 2
-        let centerY = (ctx.canvas.height - dimension * mapHeight) / 2
+        let centerX;
+        let centerY;
+        if (1000 > ctx.canvas.width) {
+            centerX = (ctx.canvas.width - dimension * mapWidth) / 2;
+            centerY = (ctx.canvas.height - dimension * mapHeight) - 100;
+        } else {
+            centerX = (ctx.canvas.width - dimension * mapWidth) / 2
+            centerY = (ctx.canvas.height - dimension * mapHeight) / 2
+        }
         let x = centerX;
         let y = centerY;
         coordinateList.length = 0;

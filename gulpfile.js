@@ -45,7 +45,7 @@ function jsWorkerTask() {
 
             "plugins": ["@babel/plugin-transform-runtime"],
         }))*/
-        //.pipe(terser())
+        .pipe(terser())
         .pipe(sourcemaps.write('.'))
         .pipe(browserSync.stream())
         .pipe(dest(output));
@@ -102,6 +102,6 @@ exports.cssTask = cssTask;
 exports.jsTask = jsTask;
 exports.default = series(
     parallel(jsTask, cssTask, wasmTask, wasmJSTask, copyHtml, imgTask, jsWorkerTask),
-    watchTask
+    //watchTask
 );
 exports.watch = watch;

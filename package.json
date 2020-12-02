@@ -1,13 +1,14 @@
 {
   "name": "geneticmazesolver",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "transpile": "babel src/js -d public/lib",
     "wasm": "cd ./src/cpp/ ; emmake make",
     "clean": "rm build/* public/lib/* 2>/dev/null",
-    "build": "npm run clean --silent && npm run transpile && npm run wasm",
+    "oldbuild": "npm run clean --silent && npm run transpile && npm run wasm",
+    "build": "npm run wasm && gulp",
     "dev": "emrun ./public/index.html --no_emrun_detect --serve_after_close"
   },
   "repository": {

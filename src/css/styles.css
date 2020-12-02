@@ -12,11 +12,13 @@ body {
   display: block; /* No floating content on sides */
 }
 
+h1 {
+font-size:2rem
+}
+
 canvas {
   z-index: -1;
 }
-
-
 
 #GenerationPrint{
   display:flex;
@@ -24,10 +26,10 @@ canvas {
   position:top;
   padding-top: 0.5rem;
   z-index: 15;
-  font: 1.0rem;
   color: black;
 }
 
+/*
 #runbtn {
   position: absolute;
   width: 5rem;
@@ -35,4 +37,38 @@ canvas {
   left: 0.5rem;
   top: 0.5rem;
   z-index: 10;
+}
+*/
+
+
+.interaction{
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  z-index: 10; 
+
+}
+
+#settings{
+  padding-top: 3rem; 
+}
+
+input,label{
+  display: block;
+}
+
+label{
+  width:8rem;
+  height:2rem;
+  margin-bottom: 0.5rem;
+}
+
+input{
+  height:1.5rem;
+  width:3rem;
+}
+
+#runbtn {
+  width: 5rem;
+  height: 2.5rem;
 }

@@ -12,10 +12,12 @@
 #include <emscripten/bind.h>
 
 //Execution Parameters
+/*
 const int populationSize = 50;
 const double perBitMutationRate = 0.01;
 const int plateauConstant = 100; //after x generations with no change in fitness end algorithm
 const int maxGeneration = 500;
+*/
 
 //Threaded parameters:
 //const int numberOfThreads = 8;
@@ -27,16 +29,40 @@ EM_JS(void, sendPlayerData, (int generation, int done, char *coordinates), {
 
 void executeRouleteMateMatching(int &i, int j, int &selectedMate, std::vector<Player> &population, long generation);
 void conductMate(Player parent1, Player parent2, std::vector<Player> &population, long generation);
-void solveMaze();
+//void solveMaze();
 void rouleteWheelSelection(std::vector<float> fitnessProbabilities, std::vector<std::vector<int>> partitions, int matings, std::vector<Player> &population, long generation);
+void solveMaze(int populationSize, double perBitMutationRate, int plateauConstant, int maxGeneration);
 
-void init()
-{
-   solveMaze();
-}
+/*
+const int populationSize = 50;
+const double perBitMutationRate = 0.01;
+const int plateauConstant = 100; //after x generations with no change in fitness end algorithm
+const int maxGeneration = 500;
+*/
 
-void solveMaze()
+double perBitMutationRate = 0.01;
+
+void solveMaze(int populationSize, double perBitMutationRate, int plateauConstant, int maxGeneration)
 {
+
+   if (populationSize < 5)
+   //check input conditions
+   {
+      populationSize = 5;
+   }
+   if (perBitMutationRate < 0 || perBitMutationRate > 1)
+   {
+      perBitMutationRate = 0;
+   }
+   if (plateauConstant < 0)
+   {
+      plateauConstant = 0;
+   }
+   if (maxGeneration < 0)
+   {
+      maxGeneration = 1;
+   }
+   ::perBitMutationRate = perBitMutationRate;
 
    //set up arrys
    std::vector<Player> population;
@@ -118,7 +144,7 @@ void solveMaze()
       population = std::vector<Player>(population.begin(), population.begin() + populationSize);
 
       //Print Progress to console
-      if (lastBestFitness != population.front().getFitness() || generation == 0)
+      if ((lastBestFitness != population.front().getFitness() || generation == 0) && exitCounter == 0)
       {
          //population.front().printMovements();
 
@@ -239,5 +265,5 @@ void conductMate(Player parent1, Player parent2, std::vector<Player> &population
 
 EMSCRIPTEN_BINDINGS(solve_maze)
 {
-   emscripten::function("init", &init);
+   emscripten::function("solveMaze", &solveMaze);
 }
