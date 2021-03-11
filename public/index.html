@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./lib/style.css" />
+    <link rel="shortcut icon" type="img/png" href="images/favicon.png" />
+    <title>Genetic Maze Solver</title>
+    <script src="./lib/index.js" type="text/javascript"></script>
+    <script type="text/javascript"></script>
+    <!-- <script src="./lib/maze_wasm.js" type="text/javascript"></script>-->
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./lib/style.css" />
-  <link rel="shortcut icon" type="img/png" href="images/favicon.png" />
-  <title>Genetic Maze Solver</title>
-  <script src="./lib/index.js" type="text/javascript"></script>
-  <script type="text/javascript"> </script>
-  <!-- <script src="./lib/maze_wasm.js" type="text/javascript"></script>-->
-</head>
-
-<body>
-  <h1 id="GenerationPrint">Click Run to Run!</h1>
-  <canvas></canvas>
-  <div class="interaction">
-    <button type="button" id="runbtn">Run</button>
-    <form id="settings">
-      <label for="pop" class="labelF">Population<br>Size:</label>
-      <input type="number" id="pop" value=50><br>
-      <label class="labelF">Per Bit<br>Mutation Rate:</label>
-      <input type="number" id="mut" value=0.01><br>
-      <label class="labelF">Max<br>Generation:</label>
-      <input type="number" id="gen" value=1000><br>
-      <label class="labelF">Plateau<br>Constant</label>
-      <input type="number" id="plat" value=100>
-    </form>
-  </div>
-  <script type="text/javascript">init() </script>
-</body>
-
+  <body>
+    <div class="main">
+      <div class="interaction main__controls">
+        <button type="button" id="runbtn">Run</button>
+        <form id="settings" class="main__controls__form">
+          <label for="pop" class="labelF">Population<br />Size:</label>
+          <input type="number" id="pop" value="50" /><br />
+          <label class="labelF">Per Bit<br />Mutation Rate:</label>
+          <input type="number" id="mut" value="0.01" /><br />
+          <label class="labelF">Max<br />Generation:</label>
+          <input type="number" id="gen" value="1000" /><br />
+          <label class="labelF">Plateau<br />Constant</label>
+          <input type="number" id="plat" value="100" />
+        </form>
+      </div>
+      <div class="main__display">
+        <h1 id="GenerationPrint" class="main__display__status">
+          Click Run to Run!
+        </h1>
+        <canvas class="main__display__canvas"></canvas>
+      </div>
+    </div>
+    <script type="text/javascript">
+      init();
+    </script>
+  </body>
 </html>
