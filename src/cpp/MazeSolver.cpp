@@ -48,7 +48,7 @@ void solveMaze(int populationSize, double perBitMutationRate, int plateauConstan
    if (populationSize < 5)
    //check input conditions
    {
-      populationSize = 5;
+      populationSize = 10;
    }
    if (perBitMutationRate < 0 || perBitMutationRate > 1)
    {
@@ -60,7 +60,7 @@ void solveMaze(int populationSize, double perBitMutationRate, int plateauConstan
    }
    if (maxGeneration < 0)
    {
-      maxGeneration = 1;
+      maxGeneration = 30;
    }
    ::perBitMutationRate = perBitMutationRate;
 
@@ -172,6 +172,9 @@ void solveMaze(int populationSize, double perBitMutationRate, int plateauConstan
       //Check if max generation
       if (maxGeneration == generation)
       {
+         char *arr = new char[0];
+         sendPlayerData(maxGeneration, 3, arr);
+         delete[] arr;
          std::cout << "No solution found";
          return;
       }

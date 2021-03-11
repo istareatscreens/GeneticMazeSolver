@@ -1,7 +1,11 @@
+let didNotSolve = false;
 addEventListener("message", async (data) => {
   importScripts("maze_wasm.js");
   Module = await createModule();
   self.addEventListener("gotCoordinates", async (event) => {
+    if (event.detail.done === 3) {
+      didNotSolve = true;
+    }
     self.postMessage(event.detail);
   });
   //void solveMaze(int populationSize, double perBitMutationRate, int plateauConstant, int maxGeneration)
@@ -18,5 +22,11 @@ addEventListener("message", async (data) => {
     parseInt(plat),
     parseInt(gen)
   );
-  self.postMessage("mazeDone");
+
+  if (!didNotSolve) {
+    self.postMessage("mazeDone");
+  } else {
+    self.postMessage("mazeFailed");
+    didNotSolve = false;
+  }
 });

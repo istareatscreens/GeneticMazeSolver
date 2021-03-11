@@ -238,6 +238,10 @@ function init() {
       btn.disabled = false;
       textValue.style.color = "#FA9500";
       textValue.textContent = "Done at " + textValue.textContent;
+    } else if (event.data == "mazeFailed") {
+      btn.disabled = false;
+      textValue.style.color = "#FF0000";
+      textValue.textContent = "Max Generation Reached - Failed";
     } else {
       let { coord, gen, done } = event.data;
       textValue.textContent = "Generation: " + gen;
